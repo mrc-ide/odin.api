@@ -20,4 +20,4 @@ Suggests:
 Remotes:
     mrc-ide/odin,
     mrc-ide/odin.js,
-    mrc-ide/porcelain
+    reside-ic/porcelain
