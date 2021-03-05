@@ -1,0 +1,6 @@
+Makefile
+.travis.yml
+^README\.Rmd$
+^docs$
+^\.github$
+^\.lintr$

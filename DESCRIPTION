@@ -1,0 +1,23 @@
+Package: odin.api
+Title: ODE Models as a Service
+Version: 0.1.0
+Authors@R: c(person("Rich", "FitzJohn", role = c("aut", "cre"),
+                    email = "rich.fitzjohn@gmail.com"),
+             person("Imperial College of Science, Technology and Medicine",
+                    role = "cph"))
+Description: Create and run odin models as a service over a simple HTTP api.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports:
+    odin (>= 1.1.8),
+    odin.js (>= 0.1.11),
+    porcelain (>= 0.1.0)
+Suggests:
+    testthat
+Remotes:
+    mrc-ide/odin,
+    mrc-ide/odin.js,
+    mrc-ide/porcelain
