@@ -1,20 +1,33 @@
 context("server")
 
-test_that("root", {
-  endpoint <- endpoint_root()
 
-  res <- endpoint$target()
-  expect_equal(res$name, scalar("odin.api"))
-  expect_setequal(names(res$version), c("odin", "odin.js", "odin.api"))
+test_that("run server", {
+  skip_if_not_installed("mockery")
+  port <- 1234
+  host <- "127.0.0.1"
 
-  res <- endpoint$run()
-  expect_true(res$validated)
+  api <- list(run = mockery::mock())
+  mock_build_api <- mockery::mock(api)
 
-  api <- build_api(validate = TRUE)
-  res <- api$request("GET", "/")
+  msg <- capture_messages(
+    with_mock(
+      "odin.api:::build_api" = mock_build_api,
+      server(port, host)))
+  expect_match(msg[[1]], "Starting odin.api server on port 1234")
 
-  expect_equal(res$status, 200L)
-  expect_equal(res$headers[["Content-Type"]], "application/json")
-  expect_equal(res$headers[["X-Porcelain-Validated"]], "true")
-  expect_equal(res$body, as.character(endpoint$run()$body))
+  mockery::expect_called(mock_build_api, 1)
+  expect_equal(mockery::mock_args(mock_build_api)[[1]], list())
+
+  mockery::expect_called(api$run, 1)
+  expect_equal(mockery::mock_args(api$run)[[1]], list(host, port))
+})
+
+
+test_that("pass arguments to server", {
+  mock_server <- mockery::mock(NULL)
+  with_mock("odin.api:::server" = mock_server,
+            main(c("--port=1234")))
+  expect_equal(
+    mockery::mock_args(mock_server)[[1]],
+    main_args("--port=1234"))
 })

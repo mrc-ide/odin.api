@@ -1,3 +1,18 @@
+##' Run odin.api server
+##'
+##' @title Run odin.api server
+##' @param port Port to serve on
+##'
+##' @param host Optional host (either `0.0.0.0` or `127.0.0.1`)
+##'
+##' @return Never returns
+##' @export
+server <- function(port, host = "0.0.0.0") {
+  message("Starting odin.api server on port ", port)
+  build_api()$run(host, port)
+}
+
+
 build_api <- function(validate = NULL) {
   api <- porcelain::porcelain$new(validate = validate)
   api$handle(endpoint_root())
