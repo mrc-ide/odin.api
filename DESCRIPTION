@@ -15,6 +15,7 @@ URL: https://github.com/mrc-ide/odin.api
 BugReports: https://github.com/mrc-ide/odin.api/issues
 Imports:
     docopt,
+    jsonlite,
     odin (>= 1.1.8),
     odin.js (>= 0.1.11),
     porcelain (>= 0.1.1)
