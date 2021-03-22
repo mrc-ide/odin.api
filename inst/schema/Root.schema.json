@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "Root",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "version": {
+            "type" : "object",
+            "additionalProperties" : {
+                "type" : "string"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [ "name", "version" ]
+}
