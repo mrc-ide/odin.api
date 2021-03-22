@@ -17,7 +17,7 @@ Imports:
     docopt,
     odin (>= 1.1.8),
     odin.js (>= 0.1.11),
-    porcelain (>= 0.1.0)
+    porcelain (>= 0.1.1)
 Suggests:
     mockery,
     testthat

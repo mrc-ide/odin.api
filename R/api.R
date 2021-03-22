@@ -16,7 +16,21 @@ server <- function(port, host = "0.0.0.0") {
 build_api <- function(validate = NULL) {
   api <- porcelain::porcelain$new(validate = validate)
   api$handle(endpoint_root())
+
+  api$registerHook("preroute", api_preroute)
+  api$registerHook("postserialize", api_postserialize)
+
   api
+}
+
+
+api_preroute <- function(data, req, res, value) {
+  api_log_start(data, req, res)
+}
+
+
+api_postserialize <- function(data, req, res, value) {
+  api_log_end(data, req, res, value)
 }
 
 
