@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "odin" : {
+            "type": "string"
+        },
+        "odin.api" : {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["odin", "odin.api"]
+}
