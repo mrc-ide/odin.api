@@ -7,8 +7,8 @@ api <- function(validate = FALSE) {
 
 ##' @porcelain GET / => json(root)
 root <- function() {
-  list(odin = scalar(as.character(packageVersion("odin"))),
-       odin.api = scalar(as.character(packageVersion("odin.api"))))
+  list(odin = scalar(package_version_string("odin")),
+       odin.api = scalar(package_version_string("odin.api")))
 }
 
 
