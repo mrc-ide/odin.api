@@ -1,0 +1,47 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "diagnostic": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "line": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                }
+            },
+            "additionalProperties": false,
+            "required": ["message", "line"]
+        }
+    },
+
+    "type": "object",
+    "properties": {
+        "valid": {
+            "type": "boolean"
+        },
+        "variables" : {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "messages": {
+            "type": "array",
+            "array": {
+                "items": {
+                    "$ref": "#/definitions/diagnostic"
+                }
+            }
+        },
+        "error": {
+            "$ref": "#/definitions/diagnostic"
+        }
+    },
+    "additionalProperties": true,
+    "required": ["valid"]
+}

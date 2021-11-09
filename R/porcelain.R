@@ -8,5 +8,14 @@
         root,
         returning = porcelain::porcelain_returning_json("root"),
         validate = validate)
+    },
+    "POST /validate" = function(state, validate) {
+      porcelain::porcelain_endpoint$new(
+        "POST",
+        "/validate",
+        model_validate,
+        porcelain::porcelain_input_body_json("data", "validate_request"),
+        returning = porcelain::porcelain_returning_json("validate_response"),
+        validate = validate)
     })
 }
