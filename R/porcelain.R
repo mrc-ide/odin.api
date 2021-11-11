@@ -17,5 +17,15 @@
         porcelain::porcelain_input_body_json("data", "validate_request"),
         returning = porcelain::porcelain_returning_json("validate_response"),
         validate = validate)
+    },
+    "POST /compile" = function(state, validate) {
+      porcelain::porcelain_endpoint$new(
+        "POST",
+        "/compile",
+        model_compile,
+        porcelain::porcelain_input_query(pretty = "logical"),
+        porcelain::porcelain_input_body_json("data"),
+        returning = porcelain::porcelain_returning_json(),
+        validate = validate)
     })
 }

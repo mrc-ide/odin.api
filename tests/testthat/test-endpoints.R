@@ -66,3 +66,23 @@ test_that("Validate rejects invalid model", {
   expect_equal(res_endpoint$status_code, 200)
   expect_equal(res_endpoint$data, res)
 })
+
+
+## NOTE: for reasons that are not totally clear, the first compiled
+## model seems to cost about 0.5s here, then after that they're cheap
+## (0.05s).  It looks like the cost of loading a package, but no
+## additional namespaces are loaded.
+test_that("Compile a simple model", {
+  data <- list(model = "initial(x) <- 1\nderiv(x) <- 1")
+  res <- model_compile(data)
+  cmp <- model_validate(data)
+  expect_setequal(names(res), c(names(cmp), "model"))
+  expect_identical(res[names(res) != "model"], cmp)
+  expect_s3_class(res$model, "scalar")
+
+  endpoint <- odin_api_endpoint("POST", "/compile")
+  res_endpoint <- endpoint$run(data)
+  expect_true(res_endpoint$validated)
+  expect_equal(res_endpoint$status_code, 200)
+  ## expect_equal(res_endpoint$data, res) # needs odin fix, temp name here
+})
