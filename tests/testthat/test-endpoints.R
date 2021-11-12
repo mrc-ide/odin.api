@@ -84,5 +84,19 @@ test_that("Compile a simple model", {
   res_endpoint <- endpoint$run(data)
   expect_true(res_endpoint$validated)
   expect_equal(res_endpoint$status_code, 200)
-  ## expect_equal(res_endpoint$data, res) # needs odin fix, temp name here
+  expect_equal(res_endpoint$data, res)
+})
+
+
+test_that("Failure to compile returns diagnostics", {
+  data <- list(model = "initial(x) <- 1\nderiv(a) <- 1")
+  res <- model_compile(data)
+  cmp <- model_validate(data)
+  expect_mapequal(res, cmp)
+
+  endpoint <- odin_api_endpoint("POST", "/compile")
+  res_endpoint <- endpoint$run(data)
+  expect_true(res_endpoint$validated)
+  expect_equal(res_endpoint$status_code, 200)
+  expect_equal(res_endpoint$data, res)
 })
