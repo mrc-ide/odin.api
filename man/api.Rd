@@ -12,7 +12,7 @@ on responses.  This should be \code{FALSE} in production
 environments.  See \link[porcelain:porcelain]{porcelain::porcelain} for details}
 
 \item{log_level}{Logging level to use. Sensible options are "off",
-"info" and "debug".}
+"info" and "all".}
 }
 \value{
 A \link[porcelain:porcelain]{porcelain::porcelain} object. Notably this does \emph{not}
