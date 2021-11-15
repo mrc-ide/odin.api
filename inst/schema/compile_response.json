@@ -14,9 +14,9 @@
                 "model": {
                     "type": "string"
                 }
-                "additionalProperties": false,
-                "required": ["valid", "metadata", "model"]
-            }
+            },
+            "additionalProperties": false,
+            "required": ["valid", "metadata", "model"]
         },
         {
             "type": "object",
@@ -26,10 +26,10 @@
                 },
                 "error": {
                     "$ref": "diagnostic.json"
-                },
-                "additionalProperties": false,
-                "required": ["valid", "metadata"]
-            }
+                }
+            },
+            "additionalProperties": false,
+            "required": ["valid", "error"]
         }
     ]
 }

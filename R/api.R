@@ -19,9 +19,9 @@ model_validate <- function(data) {
 }
 
 
-##' @porcelain POST /compile => json()
+##' @porcelain POST /compile => json(compile_response)
 ##'   query pretty :: logical
-##'   body data :: json()
+##'   body data :: json(compile_request)
 model_compile <- function(data, pretty = FALSE) {
   result <- odin_js_validate(data$model)
   if (result$valid) {

@@ -24,8 +24,8 @@
         "/compile",
         model_compile,
         porcelain::porcelain_input_query(pretty = "logical"),
-        porcelain::porcelain_input_body_json("data"),
-        returning = porcelain::porcelain_returning_json(),
+        porcelain::porcelain_input_body_json("data", "compile_request"),
+        returning = porcelain::porcelain_returning_json("compile_response"),
         validate = validate)
     })
 }
