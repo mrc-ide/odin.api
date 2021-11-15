@@ -1,0 +1,2 @@
+#!/usr/bin/env Rscript
+odin.api::api(validate = FALSE)$run("0.0.0.0", "8001")
