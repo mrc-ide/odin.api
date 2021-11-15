@@ -1,0 +1,42 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "properties": {
+        "variables" : {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "parameters": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "default": {
+                        "type": ["null", "number"]
+                    },
+                    "min": {
+                        "type": ["null", "number"]
+                    },
+                    "max": {
+                        "type": ["null", "number"]
+                    },
+                    "is_integer": {
+                        "type": "boolean"
+                    },
+                    "rank": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "messages": {
+            "type": "array",
+            "items": {
+                "$ref": "diagnostic.json"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["variables", "parameters", "messages"]
+}

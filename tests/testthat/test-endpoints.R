@@ -17,11 +17,12 @@ test_that("Can construct the api", {
 test_that("Validate model", {
   data <- list(model = "initial(x) <- 1\nderiv(x) <- 1")
   res <- model_validate(data)
-  expect_setequal(names(res), c("valid", "variables", "parameters", "messages"))
+  expect_setequal(names(res), c("valid", "metadata"))
   expect_true(res$valid)
-  expect_equal(res$variables, "x")
-  expect_equal(res$parameters, list())
-  expect_equal(res$messages, list())
+  expect_setequal(names(res$metadata), c("variables", "parameters", "messages"))
+  expect_equal(res$metadata$variables, "x")
+  expect_equal(res$metadata$parameters, list())
+  expect_equal(res$metadata$messages, list())
 
   endpoint <- odin_api_endpoint("POST", "/validate")
   res_endpoint <- endpoint$run(data)
@@ -35,13 +36,13 @@ test_that("Validate model", {
 test_that("Validate reports unused variables", {
   data <- list(model = "initial(x) <- 1\nderiv(x) <- 1\na <- 1")
   res <- model_validate(data)
-  expect_setequal(names(res), c("valid", "variables", "parameters", "messages"))
   expect_true(res$valid)
-  expect_equal(res$variables, "x")
-  expect_length(res$messages, 1)
-  expect_equal(res$messages[[1]]$message,
+
+  expect_equal(res$metadata$variables, "x")
+  expect_length(res$metadata$messages, 1)
+  expect_equal(res$metadata$messages[[1]]$message,
                scalar("Unused equation: a"))
-  expect_equal(res$messages[[1]]$line, 3)
+  expect_equal(res$metadata$messages[[1]]$line, 3)
 
   endpoint <- odin_api_endpoint("POST", "/validate")
   res_endpoint <- endpoint$run(data)
@@ -73,9 +74,9 @@ test_that("Return information about user parameters", {
   data <- list(model = "initial(x) <- 1\nderiv(x) <- a\na <- user(1.2)")
   res <- model_validate(data)
 
-  expect_type(res$parameters, "list")
-  expect_length(res$parameters, 1)
-  p <- res$parameters[[1]]
+  expect_type(res$metadata$parameters, "list")
+  expect_length(res$metadata$parameters, 1)
+  p <- res$metadata$parameters[[1]]
   expect_equal(p$default, scalar(1.2))
   expect_equal(p$min, scalar(NA))
   expect_equal(p$max, scalar(NA))
@@ -90,10 +91,6 @@ test_that("Return information about user parameters", {
 })
 
 
-## NOTE: for reasons that are not totally clear, the first compiled
-## model seems to cost about 0.5s here, then after that they're cheap
-## (0.05s).  It looks like the cost of loading a package, but no
-## additional namespaces are loaded.
 test_that("Compile a simple model", {
   data <- list(model = "initial(x) <- 1\nderiv(x) <- 1")
   res <- model_compile(data)

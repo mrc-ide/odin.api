@@ -25,10 +25,6 @@ model_validate <- function(data) {
 model_compile <- function(data, pretty = FALSE) {
   result <- odin_js_validate(data$model)
   if (result$valid) {
-    ## This generally needs a bit more tidyup here as we don't really
-    ## want to parse the model twice, which we must currently do. Once
-    ## we start applying restrictions too, the same rules should
-    ## apply. So we need a version of odin_js_model that accepts ir.
     result$model <- scalar(odin_js_model(data$model, pretty))
   }
   result
