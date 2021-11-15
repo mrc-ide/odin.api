@@ -32,9 +32,30 @@
         },
         "messages": {
             "type": "array",
-            "array": {
-                "items": {
-                    "$ref": "#/definitions/diagnostic"
+            "items": {
+                "$ref": "#/definitions/diagnostic"
+            }
+        },
+        "parameters": {
+            "type": "array"
+            "items": {
+                "type": "object",
+                "properties": {
+                    "default": {
+                        "type": ["null", "number"]
+                    },
+                    "min": {
+                        "type": ["null", "number"]
+                    },
+                    "max": {
+                        "type": ["null", "number"]
+                    },
+                    "is_integer": {
+                        "type": "boolean"
+                    }
+                    "rank": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -42,6 +63,6 @@
             "$ref": "#/definitions/diagnostic"
         }
     },
-    "additionalProperties": true,
+    "additionalProperties": false,
     "required": ["valid"]
 }

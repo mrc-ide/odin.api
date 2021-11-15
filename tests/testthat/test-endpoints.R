@@ -17,9 +17,10 @@ test_that("Can construct the api", {
 test_that("Validate model", {
   data <- list(model = "initial(x) <- 1\nderiv(x) <- 1")
   res <- model_validate(data)
-  expect_setequal(names(res), c("valid", "variables", "messages"))
+  expect_setequal(names(res), c("valid", "variables", "parameters", "messages"))
   expect_true(res$valid)
   expect_equal(res$variables, "x")
+  expect_equal(res$parameters, list())
   expect_equal(res$messages, list())
 
   endpoint <- odin_api_endpoint("POST", "/validate")
@@ -34,7 +35,7 @@ test_that("Validate model", {
 test_that("Validate reports unused variables", {
   data <- list(model = "initial(x) <- 1\nderiv(x) <- 1\na <- 1")
   res <- model_validate(data)
-  expect_setequal(names(res), c("valid", "variables", "messages"))
+  expect_setequal(names(res), c("valid", "variables", "parameters", "messages"))
   expect_true(res$valid)
   expect_equal(res$variables, "x")
   expect_length(res$messages, 1)
@@ -60,6 +61,27 @@ test_that("Validate rejects invalid model", {
   expect_equal(res$error$line, c(1, 2))
 
   ## NOTE: not a failure
+  endpoint <- odin_api_endpoint("POST", "/validate")
+  res_endpoint <- endpoint$run(data)
+  expect_true(res_endpoint$validated)
+  expect_equal(res_endpoint$status_code, 200)
+  expect_equal(res_endpoint$data, res)
+})
+
+
+test_that("Return information about user parameters", {
+  data <- list(model = "initial(x) <- 1\nderiv(x) <- a\na <- user(1.2)")
+  res <- model_validate(data)
+
+  expect_type(res$parameters, "list")
+  expect_length(res$parameters, 1)
+  p <- res$parameters[[1]]
+  expect_equal(p$default, scalar(1.2))
+  expect_equal(p$min, scalar(NA))
+  expect_equal(p$max, scalar(NA))
+  expect_equal(p$is_integer, scalar(FALSE))
+  expect_equal(p$rank, scalar(0L))
+
   endpoint <- odin_api_endpoint("POST", "/validate")
   res_endpoint <- endpoint$run(data)
   expect_true(res_endpoint$validated)
