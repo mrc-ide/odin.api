@@ -15,7 +15,9 @@ COPY docker/Rprofile.site /usr/local/lib/R/etc/Rprofile.site
 RUN install2.r --error \
         --repos=https://mrc-ide.github.io/drat \
         --repos=https://packagemanager.rstudio.com/all/__linux__/focal/latest \
+        docopt \
         jsonlite \
+        logr \
         odin \
         pkgbuild \
         porcelain
