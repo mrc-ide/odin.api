@@ -1,4 +1,16 @@
-api <- function(validate = FALSE) {
+##' Create an odin.api server, a porcelain object
+##'
+##' @title Create odin.api
+##'
+##' @param validate Logical, indicating if validation should be done
+##'   on responses.  This should be `FALSE` in production
+##'   environments.  See [porcelain::porcelain] for details
+##'
+##' @return A [porcelain::porcelain] object. Notably this does *not*
+##'   start the server
+##'
+##' @export
+api <- function(validate = NULL) {
   api <- porcelain::porcelain$new(validate = validate)
   api$include_package_endpoints()
   api
