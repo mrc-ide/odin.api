@@ -3,7 +3,7 @@ parse_main <- function(args = commandArgs(TRUE)) {
 odin.api [options]
 
 Options:
-  --log-level=LEVEL  Log-level (off, info, debug) [default: info]
+  --log-level=LEVEL  Log-level (off, info, all) [default: info]
   --validate         Enable json schema validation
   --port=PORT        Port to run api on [default: 8001]"
   dat <- docopt::docopt(usage, args)
@@ -13,7 +13,7 @@ Options:
 }
 
 
-main <- function(args) {
+main <- function(args = commandArgs(TRUE)) {
   dat <- parse_main(args)
   api(dat$validate, dat$log_level)$run("0.0.0.0", port = dat$port)
 }

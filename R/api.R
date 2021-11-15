@@ -7,7 +7,7 @@
 ##'   environments.  See [porcelain::porcelain] for details
 ##'
 ##' @param log_level Logging level to use. Sensible options are "off",
-##'   "info" and "debug".
+##'   "info" and "all".
 ##'
 ##' @return A [porcelain::porcelain] object. Notably this does *not*
 ##'   start the server
@@ -31,6 +31,7 @@ root <- function() {
 ##' @porcelain POST /validate => json(validate_response)
 ##'   body data :: json(validate_request)
 model_validate <- function(data) {
+  data <- jsonlite::fromJSON(data, simplifyDataFrame = FALSE)
   odin_js_validate(data$model)
 }
 
@@ -39,6 +40,7 @@ model_validate <- function(data) {
 ##'   query pretty :: logical
 ##'   body data :: json(compile_request)
 model_compile <- function(data, pretty = FALSE) {
+  data <- jsonlite::fromJSON(data, simplifyDataFrame = FALSE)
   result <- odin_js_validate(data$model)
   if (result$valid) {
     result$model <- scalar(odin_js_model(data$model, pretty))

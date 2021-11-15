@@ -37,8 +37,17 @@ odin_js_validate <- function(code) {
            parameters = parameters,
            messages = messages))
   } else {
+    if (inherits(result$error, "odin_error")) {
+      msg <- result$error$msg
+      line <- result$error$line
+    } else {
+      ## Can't easily get line information at this point,
+      ## unfortunately, though this is almost certainly a parse error.
+      msg <- result$error$message
+      line <- integer(0)
+    }
+
     list(valid = scalar(FALSE),
-         error = list(message = scalar(result$error$msg),
-                      line = result$error$line))
+         error = list(message = scalar(msg), line = line))
   }
 }
