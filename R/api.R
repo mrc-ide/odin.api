@@ -6,12 +6,16 @@
 ##'   on responses.  This should be `FALSE` in production
 ##'   environments.  See [porcelain::porcelain] for details
 ##'
+##' @param log_level Logging level to use. Sensible options are "off",
+##'   "info" and "debug".
+##'
 ##' @return A [porcelain::porcelain] object. Notably this does *not*
 ##'   start the server
 ##'
 ##' @export
-api <- function(validate = NULL) {
-  api <- porcelain::porcelain$new(validate = validate)
+api <- function(validate = NULL, log_level = "info") {
+  logger <- make_logger(log_level)
+  api <- porcelain::porcelain$new(validate = validate, logger = logger)
   api$include_package_endpoints()
   api
 }

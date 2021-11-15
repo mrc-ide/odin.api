@@ -10,7 +10,11 @@ test_that("root data returns sensible, validated, data", {
 
 test_that("Can construct the api", {
   obj <- api()
-  expect_equal(obj$request("GET", "/")$status, 200)
+  result <- evaluate_promise(value <- obj$request("GET", "/")$status)
+  expect_equal(value, 200)
+  logs <- lapply(strsplit(result$output, "\n")[[1]], jsonlite::parse_json)
+  expect_length(logs, 2)
+  expect_equal(logs[[1]]$logger, "odin.api")
 })
 
 
