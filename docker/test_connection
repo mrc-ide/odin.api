@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -ex
+HERE=$(dirname $0)
+. $HERE/common
+
+# In case we switch agents between steps
+[ ! -z $(docker images -q $TAG_SHA) ] || docker pull $TAG_SHA
+
+NAME_SERVER=odin_api
+
+function cleanup {
+    echo "Cleaning up"
+    docker kill $NAME_SERVER > /dev/null || true
+}
+
+trap cleanup EXIT
+
+docker run --rm -d -p 8001:8001 --name $NAME_SERVER $TAG_SHA
+
+set +e
+for attempt in $(seq 10); do
+    echo "Attempt $attempt"
+    RESPONSE=$(curl --silent http://localhost:8001)
+    if [[ "$RESPONSE" == *"success"* ]]; then
+        echo "SUCCESS"
+        exit 0
+    fi
+    sleep 1
+done
+
+echo "FAIL"
+exit 1
