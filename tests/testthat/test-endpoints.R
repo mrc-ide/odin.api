@@ -156,3 +156,18 @@ test_that("Failure to compile returns diagnostics", {
   expect_equal(res_endpoint$status_code, 200)
   expect_equal(res_endpoint$data, res)
 })
+
+
+test_that("Accept a character array", {
+  data <- list(model = c("initial(x) <- 1", "deriv(x) <- 1"))
+  json <- jsonlite::toJSON(data, auto_unbox = TRUE)
+
+  res <- model_compile(json)
+
+  endpoint <- odin_api_endpoint("POST", "/compile")
+  res_endpoint <- endpoint$run(json)
+
+  expect_true(res_endpoint$validated)
+  expect_equal(res_endpoint$status_code, 200)
+  expect_equal(res_endpoint$data, res)
+})

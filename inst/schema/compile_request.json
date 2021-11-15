@@ -3,7 +3,17 @@
     "type": "object",
     "properties": {
         "model" : {
-            "type": "string"
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ]
         }
     },
     "additionalProperties": false,
