@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+
+    "oneOf": [
+        {
+            "type": "object",
+            "properties": {
+                "valid": {
+                    "enum": [ true ]
+                },
+                "metadata": {
+                    "$ref": "metadata.json"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["valid", "metadata"]
+        },
+        {
+            "type": "object",
+            "properties": {
+                "valid": {
+                    "enum": [ false ]
+                },
+                "error": {
+                    "$ref": "diagnostic.json"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["valid", "error"]
+        }
+    ]
+}
