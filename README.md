@@ -18,9 +18,11 @@ remotes::install_github("mrc-ide/odin.api", upgrade = FALSE)
 ## Usage
 
 ```
-docker pull mrcide/odin.api
-docker run -d --rm -p 8001:8001 mrcide/odin.api
+docker pull mrcide/odin.api:main
+docker run -d --rm -p 8001:8001 mrcide/odin.api:main
 ```
+
+Replace `:main` with any branch or SHA, or with a version number such as `v0.1.0` for versions that have been built from `main`. If you omit the branch or use `latest` it will pull/run the last version merged to `main`.
 
 Informational root endpoint `GET /`
 
@@ -66,6 +68,28 @@ $ curl -s -H 'Content-Type: application/json' \
 }
 ```
 
+Invalid models will return information about where they failed (note that this will return a HTTP 200 response)
+
+```
+$ curl -s -H 'Content-Type: application/json' \
+   --data '{"model": "deriv(x) <- z\ninitial(x) <- 1\na <- user(1)"}' \
+   http://localhost:8001/validate | jq
+{
+  "status": "success",
+  "errors": null,
+  "data": {
+    "valid": false,
+    "error": {
+      "message": "Unknown variable z",
+      "line": [
+        1
+      ]
+    }
+  }
+}
+
+```
+
 Compile a model with `POST /compile`
 
 ```
@@ -96,6 +120,8 @@ $ curl -s -H 'Content-Type: application/json' \
   }
 }
 ```
+
+The generated model is subject to, and expected to, change; an example can be seen [on the old `odin.js` repository](https://github.com/mrc-ide/odin.js/#use-from-webpages).
 
 The two `POST` endpoints will accept either a string with embedded newlines or an array of strings as input.
 
