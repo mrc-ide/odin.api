@@ -43,7 +43,28 @@ model_compile <- function(data, pretty = FALSE) {
   data <- jsonlite::fromJSON(data, simplifyDataFrame = FALSE)
   result <- odin_js_validate(data$model)
   if (result$valid) {
-    result$model <- scalar(odin_js_model(data$model, pretty))
+    code <- odin_js_model(data$model)
+    result$model <- scalar(prepare_code(code, pretty))
   }
   result
+}
+
+
+##' @porcelain GET /support/dopri => json
+##'   query pretty :: logical
+support_dopri <- function(pretty = FALSE) {
+  code <- odin::odin_js_bundle(NULL,
+                               include_support = FALSE,
+                               include_dopri = TRUE)$dopri
+  scalar(prepare_code(code, pretty))
+}
+
+##' @porcelain GET /support/runner-ode => json
+##'   query pretty :: logical
+support_runner_ode <- function(pretty = FALSE) {
+  code <- odin::odin_js_bundle(NULL,
+                               include_support = TRUE,
+                               include_dopri = FALSE)$support
+  code <- c(code, "wodinRunner;")
+  scalar(prepare_code(code, pretty))
 }
