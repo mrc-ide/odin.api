@@ -13,16 +13,6 @@ package_version_string <- function(name) {
 }
 
 
-system_file <- function(...) {
-  system.file(..., mustWork = TRUE)
-}
-
-
-read_string <- function(path) {
-  paste(readLines(path), collapse = "\n")
-}
-
-
 uglify <- function(code) {
   ## This works for now but is slow; hopefully we can come up with
   ## some v8-hosted solution soon.
