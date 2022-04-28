@@ -116,14 +116,33 @@ $ curl -s -H 'Content-Type: application/json' \
       ],
       "messages": []
     },
-    "model": "...large blob of js removed..."
+    "model": "\"use strict\";\nclass odin {\n  constructor(base, user, unusedUserAction) {\n    this.base = base;\n    this.internal = {};\n    var internal = this.internal;\n    internal.initial_x = 1;\n    this.setUser(user, unusedUserAction);\n  }\n  coef = {a: {has_default: false, default: 1, rank: 0, min: -Infinity, max: Infinity, integer: false}}\n  rhs(t, state, dstatedt) {\n    var internal = this.internal;\n    dstatedt[0] = internal.a;\n  }\n  run(tStart, tEnd, y0, control, Dopri) {\n    return this.base.run(tStart, tEnd, y0, control, this, Dopri);\n  }\n  initial(t) {\n    var internal = this.internal;\n    var state = this.base.zeros(1);\n    state[0] = internal.initial_x;\n    return state;\n  }\n  updateMetadata() {\n    this.metadata = {};\n    var internal = this.internal;\n    this.metadata.ynames = [\"t\", \"x\"];\n    this.metadata.internalOrder = {a: null, initial_x: null};\n    this.metadata.variableOrder = {x: null};\n    this.metadata.outputOrder = null;\n  }\n  setUser(user, unusedUserAction) {\n    this.base.checkUser(user, [\"a\"], unusedUserAction);\n    var internal = this.internal;\n    this.base.getUser(user, \"a\", internal, null, 1, null, null, false);\n    this.updateMetadata();\n  }\n}\nodin;"
   }
 }
 ```
 
-The generated model is subject to, and expected to, change; an example can be seen [on the old `odin.js` repository](https://github.com/mrc-ide/odin.js/#use-from-webpages).
+The generated model is subject to, and expected to, change.
 
 The two `POST` endpoints will accept either a string with embedded newlines or an array of strings as input.
+
+Support code can be retrieved via the `/support/dopri` and `/support/runner-ode` endpoints.
+
+```
+$ curl -s http://localhost:8001/support/dopri | jq
+{
+  "status": "success",
+  "errors": null,
+  "data": "(function(){function r(e,n,t){function..."
+}
+```
+
+```
+$ curl -s http://localhost:8001/support/runner-ode | jq
+{
+  "status": "success",
+  "errors": null,
+  "data": "\"use strict\";\n\nfunction wodinRunner..."
+```
 
 ## License
 
