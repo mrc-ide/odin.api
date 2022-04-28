@@ -26,7 +26,8 @@ read_string <- function(path) {
 uglify <- function(code) {
   ## This works for now but is slow; hopefully we can come up with
   ## some v8-hosted solution soon.
-  system2("uglifyjs", "--v8", stdout = TRUE, input = code)
+  ## > system2("uglifyjs", "--v8", stdout = TRUE, input = code)
+  code
 }
 
 
