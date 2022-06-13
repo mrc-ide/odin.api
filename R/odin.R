@@ -1,11 +1,10 @@
-## Looks like some support here is needed in odin, though very little
-## to make this work.
-odin_js_model <- function(code, pretty) {
-  model <- odin::odin_js_bundle(code, include_dopri = FALSE)
-  if (!pretty) {
-    model <- js::uglify_reformat(model)
-  }
-  model
+odin_js_model <- function(code) {
+  model <- odin::odin_js_bundle(code,
+                                include_support = FALSE,
+                                include_dopri = FALSE)$model
+  c('"use strict";',
+    model$code,
+    sprintf("%s;", model$name))
 }
 
 
