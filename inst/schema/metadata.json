@@ -12,6 +12,9 @@
             "items": {
                 "type": "object",
                 "properties": {
+                    "name": {
+                        "type": "string"
+                    },
                     "default": {
                         "type": ["null", "number"]
                     },
