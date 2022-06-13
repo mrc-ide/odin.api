@@ -22,7 +22,8 @@ odin_js_validate <- function(code) {
 
     process_user <- function(nm) {
       x <- dat$equations[[nm]]$user
-      list(default = scalar(x$default %||% NA),
+      list(name = scalar(nm),
+           default = scalar(x$default %||% NA),
            min = scalar(x$min %||% NA),
            max = scalar(x$max %||% NA),
            is_integer = scalar(x$integer %||% FALSE),

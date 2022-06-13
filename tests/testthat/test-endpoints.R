@@ -110,6 +110,7 @@ test_that("Return information about user parameters", {
   expect_type(res$metadata$parameters, "list")
   expect_length(res$metadata$parameters, 1)
   p <- res$metadata$parameters[[1]]
+  expect_equal(p$name, scalar("a"))
   expect_equal(p$default, scalar(1.2))
   expect_equal(p$min, scalar(NA))
   expect_equal(p$max, scalar(NA))
