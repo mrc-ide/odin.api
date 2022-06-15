@@ -1,6 +1,6 @@
 Package: odin.api
 Title: Serve 'odin' Models via an API
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Rich", "FitzJohn", role = c("aut", "cre"),
                     email = "rich.fitzjohn@gmail.com"),
              person("Imperial College of Science, Technology and Medicine",
@@ -17,7 +17,7 @@ Imports:
     js,
     jsonlite,
     lgr,
-    odin (>= 1.3.4),
+    odin (>= 1.3.5),
     pkgbuild,
     porcelain (>= 0.1.7)
 Suggests:
@@ -25,6 +25,6 @@ Suggests:
     mockery,
     testthat (>= 3.0.0)
 Remotes:
-    mrc-ide/odin@mrc-3180,
+    mrc-ide/odin@mrc-3182,
     reside-ic/porcelain
 Config/testthat/edition: 3
