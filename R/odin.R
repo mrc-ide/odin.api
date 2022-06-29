@@ -1,7 +1,5 @@
 odin_js_model <- function(code) {
-  model <- odin::odin_js_bundle(code,
-                                include_support = FALSE,
-                                include_dopri = FALSE)$model
+  model <- odin::odin_js_bundle(code, include_support = FALSE)$model
   c('"use strict";',
     model$code,
     sprintf("%s;", model$name))

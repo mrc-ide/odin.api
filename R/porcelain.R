@@ -28,21 +28,11 @@
         returning = porcelain::porcelain_returning_json("compile_response"),
         validate = validate)
     },
-    "GET /support/dopri" = function(state, validate) {
-      porcelain::porcelain_endpoint$new(
-        "GET",
-        "/support/dopri",
-        support_dopri,
-        porcelain::porcelain_input_query(pretty = "logical"),
-        returning = porcelain::porcelain_returning_json(),
-        validate = validate)
-    },
     "GET /support/runner-ode" = function(state, validate) {
       porcelain::porcelain_endpoint$new(
         "GET",
         "/support/runner-ode",
         support_runner_ode,
-        porcelain::porcelain_input_query(pretty = "logical"),
         returning = porcelain::porcelain_returning_json(),
         validate = validate)
     })
