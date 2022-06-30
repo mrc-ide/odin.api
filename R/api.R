@@ -53,5 +53,7 @@ model_compile <- function(data, pretty = FALSE) {
 ##' @porcelain GET /support/runner-ode => json
 support_runner_ode <- function() {
   code <- odin::odin_js_bundle(NULL, include_support = TRUE)$support
-  scalar(code)
+  ## We add "odinjs;" after the code here so that a JS `eval()` around
+  ## it returns the object.
+  scalar(paste0(code, "odinjs;"))
 }
