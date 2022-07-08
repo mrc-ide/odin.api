@@ -50,21 +50,10 @@ model_compile <- function(data, pretty = FALSE) {
 }
 
 
-##' @porcelain GET /support/dopri => json
-##'   query pretty :: logical
-support_dopri <- function(pretty = FALSE) {
-  code <- odin::odin_js_bundle(NULL,
-                               include_support = FALSE,
-                               include_dopri = TRUE)$dopri
-  scalar(prepare_code(code, pretty))
-}
-
 ##' @porcelain GET /support/runner-ode => json
-##'   query pretty :: logical
-support_runner_ode <- function(pretty = FALSE) {
-  code <- odin::odin_js_bundle(NULL,
-                               include_support = TRUE,
-                               include_dopri = FALSE)$support
-  code <- c(code, "wodinRunner;")
-  scalar(prepare_code(code, pretty))
+support_runner_ode <- function() {
+  code <- odin::odin_js_bundle(NULL, include_support = TRUE)$support
+  ## We add "odinjs;" after the code here so that a JS `eval()` around
+  ## it returns the object.
+  scalar(paste0(code, "odinjs;"))
 }
