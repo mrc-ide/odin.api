@@ -3,7 +3,8 @@ test_that("root data returns sensible, validated, data", {
   endpoint <- odin_api_endpoint("GET", "/")
   res <- endpoint$run()
   expect_true(res$validated)
-  expect_setequal(names(res$data), c("odin", "odin.api"))
+  expect_true(all(c("odin", "odin.api", "odinjs", "dopri", "dfoptim") %in%
+                  names(res$data)))
   expect_match(unlist(res$data), "^[0-9]+\\.[0-9]+\\.[0-9]+$")
 })
 

@@ -23,8 +23,10 @@ api <- function(validate = NULL, log_level = "info") {
 
 ##' @porcelain GET / => json(root)
 root <- function() {
-  list(odin = scalar(package_version_string("odin")),
-       odin.api = scalar(package_version_string("odin.api")))
+  versions <- c(list(odin = utils::packageVersion("odin"),
+                     odin.api = utils::packageVersion("odin.api")),
+                odin::odin_js_versions())
+  lapply(versions, function(v) scalar(as.character(v)))
 }
 
 
