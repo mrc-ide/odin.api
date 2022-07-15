@@ -1,14 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
-    "properties": {
-        "odin" : {
-            "type": "string"
-        },
-        "odin.api" : {
-            "type": "string"
-        }
+    "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9]+(\\.[0-9]+)*$"
     },
-    "additionalProperties": false,
-    "required": ["odin", "odin.api"]
+    "required": ["odin", "odin.api", "odinjs"]
 }
