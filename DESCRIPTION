@@ -17,7 +17,7 @@ Imports:
     js,
     jsonlite,
     lgr,
-    odin (>= 1.3.10),
+    odin (>= 1.3.11),
     pkgbuild,
     porcelain (>= 0.1.7)
 Suggests:
@@ -25,6 +25,6 @@ Suggests:
     mockery,
     testthat (>= 3.0.0)
 Remotes:
-    mrc-ide/odin@mrc-3182,
+    mrc-ide/odin@mrc-3478,
     reside-ic/porcelain
 Config/testthat/edition: 3
