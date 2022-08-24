@@ -109,7 +109,7 @@ test_that("Validate won't accept discrete time model", {
   expect_setequal(names(res$error), c("message", "line"))
   expect_match(
     res$error$message,
-    "Only continuous time models currently supported)",
+    "Only continuous time models currently supported",
     fixed = TRUE)
   expect_equal(res$error$line, integer(0))
 })
