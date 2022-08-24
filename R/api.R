@@ -34,7 +34,7 @@ root <- function() {
 ##'   body data :: json(validate_request)
 model_validate <- function(data) {
   data <- jsonlite::fromJSON(data, simplifyDataFrame = FALSE)
-  odin_js_validate(data$model)
+  odin_js_validate(data$model, data$requirements)
 }
 
 
@@ -43,7 +43,7 @@ model_validate <- function(data) {
 ##'   body data :: json(compile_request)
 model_compile <- function(data, pretty = FALSE) {
   data <- jsonlite::fromJSON(data, simplifyDataFrame = FALSE)
-  result <- odin_js_validate(data$model)
+  result <- odin_js_validate(data$model, data$requirements)
   if (result$valid) {
     code <- odin_js_model(data$model)
     result$model <- scalar(prepare_code(code, pretty))
