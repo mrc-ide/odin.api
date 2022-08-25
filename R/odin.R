@@ -76,7 +76,7 @@ check_requirements <- function(result, requirements) {
     ## to check that stochastic models do not use output (or
     ## interpolation?) as this is not supported in dust, even though it
     ## still is in odin itself.
-    msg <- "Expected a model continuous time model (using deriv, not update)"
+    msg <- "Expected a continuous time model (using deriv, not update)"
     vars <- names(dat$data$variable$contents)
     line <- lapply(dat$equations, function(el) {
       if (el$lhs %in% vars && el$name %in% dat$components$rhs)
@@ -89,7 +89,7 @@ check_requirements <- function(result, requirements) {
     ## as there are two separate problems:
     ##
     ## * array variables and output (difficult to plot)
-    ## * array arameters (difficult to enter)
+    ## * array parameters (difficult to enter)
     ##
     ## We'll likely support these separately later but for now it's ok
     ## to rule both out. Once we split these we'll get better line
