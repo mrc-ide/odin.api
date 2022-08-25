@@ -1,0 +1,11 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "timeType": {
+            "comment": "The time model used",
+            "type": "string",
+            "enum": ["continuous"]
+        }
+    }
+}

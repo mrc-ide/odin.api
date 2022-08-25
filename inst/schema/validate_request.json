@@ -2,18 +2,11 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
-        "model" : {
-            "oneOf": [
-                {
-                    "type": "string"
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            ]
+        "model": {
+            "$ref": "model.json"
+        },
+        "requirements": {
+            "$ref": "requirements.json"
         }
     },
     "additionalProperties": false,

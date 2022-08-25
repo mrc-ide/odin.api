@@ -81,6 +81,40 @@ test_that("Validate rejects invalid model", {
 })
 
 
+test_that("Validate rejects discrete time model", {
+  data <- list(model = "initial(x) <- 1\nupdate(x) <- 1",
+               requirements = list(timeType = "continuous"))
+  json <- jsonlite::toJSON(data, auto_unbox = TRUE)
+
+  res <- model_validate(json)
+  expect_setequal(names(res), c("valid", "error"))
+  expect_false(res$valid)
+  expect_setequal(names(res$error), c("message", "line"))
+  expect_match(
+    res$error$message,
+    "Expected a continuous time model (using deriv, not update)",
+    fixed = TRUE)
+  expect_equal(res$error$line, 2)
+})
+
+
+test_that("Validate won't accept discrete time model", {
+  data <- list(model = "initial(x) <- 1\nupdate(x) <- 1",
+               requirements = list(timeType = "discrete"))
+  json <- jsonlite::toJSON(data, auto_unbox = TRUE)
+
+  res <- model_validate(json)
+  expect_setequal(names(res), c("valid", "error"))
+  expect_false(res$valid)
+  expect_setequal(names(res$error), c("message", "line"))
+  expect_match(
+    res$error$message,
+    "Only continuous time models currently supported",
+    fixed = TRUE)
+  expect_equal(res$error$line, integer(0))
+})
+
+
 test_that("Validate sensibly reports on syntax error", {
   data <- list(model = "initial(x) <- 1\nderiv(y)) <- 1")
   json <- jsonlite::toJSON(data, auto_unbox = TRUE)
