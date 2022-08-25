@@ -28,7 +28,7 @@ test_that("can ensure models have the expected time type", {
   code <- c("initial(x) <- 1",
             "update(x) <- 1")
   res <- odin_js_validate(code, list(timeType = "continuous"))
-  msg <- "Expected a model continuous time model (using deriv, not update)"
+  msg <- "Expected a continuous time model (using deriv, not update)"
   expect_mapequal(
     res,
     list(valid = scalar(FALSE),

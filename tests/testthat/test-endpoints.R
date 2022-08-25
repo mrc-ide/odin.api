@@ -92,7 +92,7 @@ test_that("Validate rejects discrete time model", {
   expect_setequal(names(res$error), c("message", "line"))
   expect_match(
     res$error$message,
-    "Expected a model continuous time model (using deriv, not update)",
+    "Expected a continuous time model (using deriv, not update)",
     fixed = TRUE)
   expect_equal(res$error$line, 2)
 })
