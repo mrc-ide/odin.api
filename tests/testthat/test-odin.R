@@ -51,7 +51,17 @@ test_that("disable use of arrays", {
 })
 
 
+test_that("can return nice errors on parse failure", {
+  res <- odin_js_validate("y <- 1\nz <- 2\nx b\na <- 1", NULL)
+  expect_equal(res$valid, scalar(FALSE))
+  expect_equal(res$error$message, scalar("unexpected symbol"))
+  expect_equal(res$error$line, 3)
+  expect_equal(res$error$line_ranges, list(c(3, 3)))
+})
+
+
 test_that("can tidy line numbers", {
+  expect_equal(tidy_lines(integer(0)), list())
   expect_equal(tidy_lines(1), list(c(1, 1)))
   expect_equal(tidy_lines(10), list(c(10, 10)))
 
@@ -60,4 +70,19 @@ test_that("can tidy line numbers", {
                list(c(1, 4), c(6, 6), c(9, 10)))
   expect_equal(tidy_lines(c(1, 2, 3, 4, 6, 7, 9, 10)),
                list(c(1, 4), c(6, 7), c(9, 10)))
+})
+
+
+test_that("can tidy up parse errors", {
+  f <- function(code) {
+    parse_parse_error(
+      tryCatch(parse(text = code, keep.source = TRUE),
+               error = identity)$message)
+  }
+  expect_equal(f("x y"),
+               list(msg = "unexpected symbol",
+                    line = 1))
+  expect_equal(f("a <- 1\nx y"),
+               list(msg = "unexpected symbol",
+                    line = 2))
 })

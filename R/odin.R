@@ -15,17 +15,19 @@ odin_js_validate <- function(code, requirements) {
   }
 
   if (!result$success) {
-    if (inherits(result$error, "odin_error")) {
-      msg <- result$error$msg
-      line <- result$error$line
+    err <- result$error
+    if (inherits(err, "odin_error")) {
+      err <- result$error
     } else {
-      ## Can't easily get line information at this point,
-      ## unfortunately, though this is almost certainly a parse error.
-      msg <- result$error$message
-      line <- integer(0)
+      ## Most likely this is a parse error, and I don't see anything
+      ## that makes this easy to get from R, unfortunately. Have a
+      ## look at R's src/main/source.c for the code here for the
+      ## options. It's important to strip off the context otherwise
+      ## things get a bit weird.
+      err <- parse_parse_error(result$error$message)
     }
     return(list(valid = scalar(FALSE),
-                error = list(message = scalar(msg), line = line)))
+                error = odin_error_detail(err$msg, err$line)))
   }
 
   dat <- result$result
@@ -116,11 +118,55 @@ odin_validate_error_value <- function(msg, line = integer(0)) {
 ## Convert a vector of integers into a maximally grouped set of
 ## start/end pairs
 tidy_lines <- function(lines) {
-  ## The easy case:
+  if (length(lines) == 0) {
+    return(list())
+  }
   if (length(lines) == 1) {
     return(list(c(lines, lines)))
   }
   lines <- sort(lines)
   group <- cumsum(c(1, diff(lines)) != 1)
   unname(lapply(split(lines, group), function(x) c(x[1], x[length(x)])))
+}
+
+
+odin_error_detail <- function(msg, line) {
+  list(message = scalar(msg),
+       line = line,
+       line_ranges = tidy_lines(line))
+}
+
+
+
+## The patterns that things might confirm to are
+##
+## (file):(line):(column): (message)
+##
+## or that, followed by one or two lines of context:
+##
+## (line): (code)
+##
+## followed by a pointer to the error using "^"
+##
+## for example:
+##
+## <text>:4:0: unexpected end of input
+## 2: z <- 2
+## 3: x <
+##   ^
+##
+## We assume the filename '<text>' here because that is what R uses
+## when asked to parse a string.
+##
+## Naturally, this relies on lots of undocumented behaviour!
+parse_parse_error <- function(msg) {
+  re <- "^<text>:([0-9]+):[0-9]: (.*?)(\n[0-9]+:.*)*$"
+  line <- integer(0)
+
+  if (grepl(re, msg)) {
+    line <- as.integer(sub(re, "\\1", msg))
+    msg <- sub(re, "\\2", msg)
+  }
+
+  list(msg = msg, line = line)
 }
