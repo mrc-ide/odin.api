@@ -125,7 +125,7 @@ test_that("Validate sensibly reports on syntax error", {
   expect_setequal(names(res$error), c("message", "line"))
 
   expect_match(res$error$message, "unexpected")
-  expect_equal(res$error$line, integer(0))
+  expect_equal(res$error$line, 2)
 
   ## NOTE: not a failure
   endpoint <- odin_api_endpoint("POST", "/validate")

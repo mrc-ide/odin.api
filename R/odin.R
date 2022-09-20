@@ -115,25 +115,9 @@ odin_validate_error_value <- function(msg, line = integer(0)) {
 }
 
 
-## Convert a vector of integers into a maximally grouped set of
-## start/end pairs
-tidy_lines <- function(lines) {
-  if (length(lines) == 0) {
-    return(list())
-  }
-  if (length(lines) == 1) {
-    return(list(c(lines, lines)))
-  }
-  lines <- sort(lines)
-  group <- cumsum(c(1, diff(lines)) != 1)
-  unname(lapply(split(lines, group), function(x) c(x[1], x[length(x)])))
-}
-
-
 odin_error_detail <- function(msg, line) {
   list(message = scalar(msg),
-       line = line,
-       line_ranges = tidy_lines(line))
+       line = line)
 }
 
 

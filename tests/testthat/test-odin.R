@@ -56,20 +56,6 @@ test_that("can return nice errors on parse failure", {
   expect_equal(res$valid, scalar(FALSE))
   expect_equal(res$error$message, scalar("unexpected symbol"))
   expect_equal(res$error$line, 3)
-  expect_equal(res$error$line_ranges, list(c(3, 3)))
-})
-
-
-test_that("can tidy line numbers", {
-  expect_equal(tidy_lines(integer(0)), list())
-  expect_equal(tidy_lines(1), list(c(1, 1)))
-  expect_equal(tidy_lines(10), list(c(10, 10)))
-
-  expect_equal(tidy_lines(1:4), list(c(1, 4)))
-  expect_equal(tidy_lines(c(1, 2, 3, 4, 6, 9, 10)),
-               list(c(1, 4), c(6, 6), c(9, 10)))
-  expect_equal(tidy_lines(c(1, 2, 3, 4, 6, 7, 9, 10)),
-               list(c(1, 4), c(6, 7), c(9, 10)))
 })
 
 
