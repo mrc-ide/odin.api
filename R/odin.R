@@ -111,3 +111,16 @@ odin_validate_error_value <- function(msg, line = integer(0)) {
        result = NULL,
        error = structure(list(msg = msg, line = line), class = "odin_error"))
 }
+
+
+## Convert a vector of integers into a maximally grouped set of
+## start/end pairs
+tidy_lines <- function(lines) {
+  ## The easy case:
+  if (length(lines) == 1) {
+    return(list(c(lines, lines)))
+  }
+  lines <- sort(lines)
+  group <- cumsum(c(1, diff(lines)) != 1)
+  unname(lapply(split(lines, group), function(x) c(x[1], x[length(x)])))
+}

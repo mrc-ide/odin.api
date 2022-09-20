@@ -49,3 +49,15 @@ test_that("disable use of arrays", {
          error = list(
            message = scalar(msg), line = c(1, 2))))
 })
+
+
+test_that("can tidy line numbers", {
+  expect_equal(tidy_lines(1), list(c(1, 1)))
+  expect_equal(tidy_lines(10), list(c(10, 10)))
+
+  expect_equal(tidy_lines(1:4), list(c(1, 4)))
+  expect_equal(tidy_lines(c(1, 2, 3, 4, 6, 9, 10)),
+               list(c(1, 4), c(6, 6), c(9, 10)))
+  expect_equal(tidy_lines(c(1, 2, 3, 4, 6, 7, 9, 10)),
+               list(c(1, 4), c(6, 7), c(9, 10)))
+})
