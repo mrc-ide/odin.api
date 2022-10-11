@@ -71,4 +71,7 @@ test_that("can tidy up parse errors", {
   expect_equal(f("a <- 1\nx y"),
                list(msg = "unexpected symbol",
                     line = 2))
+  expect_equal(f("R_0 <- user(1.5) a"),
+               list(msg = "unexpected symbol",
+                    line = 1))
 })

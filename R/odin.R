@@ -144,7 +144,7 @@ odin_error_detail <- function(msg, line) {
 ##
 ## Naturally, this relies on lots of undocumented behaviour!
 parse_parse_error <- function(msg) {
-  re <- "^<text>:([0-9]+):[0-9]: (.*?)(\n[0-9]+:.*)*$"
+  re <- "^<text>:([0-9]+):[0-9]+: (.*?)(\n[0-9]+:.*)*$"
   line <- integer(0)
 
   if (grepl(re, msg)) {
