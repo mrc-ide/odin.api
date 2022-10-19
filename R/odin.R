@@ -121,8 +121,7 @@ odin_error_detail <- function(msg, line) {
 }
 
 
-
-## The patterns that things might confirm to are
+## The patterns that things might conform to are
 ##
 ## (file):(line):(column): (message)
 ##

@@ -28,3 +28,16 @@ prepare_code <- function(code, pretty) {
   }
   code
 }
+
+
+read_string <- function(path) {
+  ## We need 'warn = FALSE' here to prevent warnings about missing
+  ## trailing newlines (which the bundled js files in odin lack due to
+  ## webpack)
+  paste(readLines(path, warn = FALSE), collapse = "\n")
+}
+
+
+system_file <- function(path, package) {
+  system.file(path, package = package, mustWork = TRUE)
+}
