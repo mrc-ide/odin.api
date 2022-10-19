@@ -1,7 +1,20 @@
-test_that("can validate simple model", {
+test_that("can validate simple ode model", {
   code <- c("initial(x) <- 1",
             "deriv(x) <- 1")
   res <- odin_js_validate(code, NULL)
+  expect_mapequal(
+    res,
+    list(valid = scalar(TRUE),
+         metadata = list(variables = "x",
+                         parameters = list(),
+                         messages = list())))
+})
+
+
+test_that("can validate simple discrete time model", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
   expect_mapequal(
     res,
     list(valid = scalar(TRUE),
@@ -29,6 +42,19 @@ test_that("can ensure models have the expected time type", {
             "update(x) <- 1")
   res <- odin_js_validate(code, list(timeType = "continuous"))
   msg <- "Expected a continuous time model (using deriv, not update)"
+  expect_mapequal(
+    res,
+    list(valid = scalar(FALSE),
+         error = list(
+           message = scalar(msg), line = 2)))
+})
+
+
+test_that("can ensure models have the expected time type", {
+  code <- c("initial(x) <- 1",
+            "deriv(x) <- 1")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  msg <- "Expected a discrete time model (using update, not deriv)"
   expect_mapequal(
     res,
     list(valid = scalar(FALSE),
