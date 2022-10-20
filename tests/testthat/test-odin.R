@@ -106,6 +106,21 @@ test_that("disable use of arrays", {
 })
 
 
+test_that("disable use of output within discrete models", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1",
+            "output(a) <- 1",
+            "output(b) <- 2")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  msg <-  "output() is not supported in discrete time models"
+  expect_mapequal(
+    res,
+    list(valid = scalar(FALSE),
+         error = list(
+           message = scalar(msg), line = c(3, 4))))
+})
+
+
 test_that("can return nice errors on parse failure", {
   res <- odin_js_validate("y <- 1\nz <- 2\nx b\na <- 1", NULL)
   expect_equal(res$valid, scalar(FALSE))

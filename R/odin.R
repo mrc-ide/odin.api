@@ -98,10 +98,9 @@ check_requirements <- function(result, requirements) {
 
   if (is_discrete && dat$features$has_output) {
     msg <- "output() is not supported in discrete time models"
-    vars <- names(dat$data$output$contents)
+    output <- names(dat$data$output$contents)
     line <- lapply(dat$equations, function(el) {
-      if (el$lhs %in% vars && el$name %in% dat$components$rhs)
-        el$source else NULL
+      if (el$lhs %in% output) el$source else NULL
     })
     return(odin_validate_error_value(msg, line))
   }
