@@ -98,9 +98,9 @@ test_that("Validate rejects discrete time model", {
 })
 
 
-test_that("Validate won't accept discrete time model", {
+test_that("Validate won't accept model where requirements disagree", {
   data <- list(model = "initial(x) <- 1\nupdate(x) <- 1",
-               requirements = list(timeType = "discrete"))
+               requirements = list(timeType = "continuous"))
   json <- jsonlite::toJSON(data, auto_unbox = TRUE)
 
   res <- model_validate(json)
@@ -109,9 +109,9 @@ test_that("Validate won't accept discrete time model", {
   expect_setequal(names(res$error), c("message", "line"))
   expect_match(
     res$error$message,
-    "Only continuous time models currently supported",
+     "Expected a continuous time model (using deriv, not update)",
     fixed = TRUE)
-  expect_equal(res$error$line, integer(0))
+  expect_equal(res$error$line, 2)
 })
 
 
@@ -203,6 +203,25 @@ test_that("Accept a character array", {
   endpoint <- odin_api_endpoint("POST", "/compile")
   res_endpoint <- endpoint$run(json)
 
+  expect_true(res_endpoint$validated)
+  expect_equal(res_endpoint$status_code, 200)
+  expect_equal(res_endpoint$data, res)
+})
+
+
+test_that("Compile a stochastic model", {
+  data <- list(model = "initial(x) <- 1\nupdate(x) <- x + norm_rand()",
+               requirements = list(timeType = "discrete"))
+  json <- jsonlite::toJSON(data, auto_unbox = TRUE)
+
+  res <- model_compile(json)
+  cmp <- model_validate(json)
+  expect_setequal(names(res), c(names(cmp), "model"))
+  expect_identical(res[names(res) != "model"], cmp)
+  expect_s3_class(res$model, "scalar")
+
+  endpoint <- odin_api_endpoint("POST", "/compile")
+  res_endpoint <- endpoint$run(json)
   expect_true(res_endpoint$validated)
   expect_equal(res_endpoint$status_code, 200)
   expect_equal(res_endpoint$data, res)
