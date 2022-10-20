@@ -37,6 +37,25 @@ odin_js_validate <- function(code, requirements) {
   variables <- c(names(dat$data$variable$contents),
                  names(dat$data$output$contents))
 
+  dt <- NULL
+  if (dat$features$discrete) {
+    eq <- dat$equations$dt
+    if (is.null(eq)) {
+      dt <- scalar(1)
+    } else {
+      ## TODO: later we can relax this to allow simple expressions, or
+      ## even dependencies only on things available at compile time,
+      ## or from user variables, but we don't need that at the moment
+      ## so just going with the easiest form:
+      if (eq$type != "expression_scalar" || !is.numeric(eq$rhs$value)) {
+        msg <- "'dt' must be a simple numeric expression, if present"
+        return(list(valid = scalar(FALSE),
+                    error = odin_error_detail(msg, list_to_integer(eq$source))))
+      }
+      dt <- scalar(eval(eq$rhs$value, baseenv()))
+    }
+  }
+
   process_user <- function(nm) {
     x <- dat$equations[[nm]]$user
     list(name = scalar(nm),
@@ -52,6 +71,7 @@ odin_js_validate <- function(code, requirements) {
        metadata = list(
          variables = variables,
          parameters = parameters,
+         dt = dt,
          messages = messages))
 }
 

@@ -41,3 +41,8 @@ read_string <- function(path) {
 system_file <- function(path, package) {
   system.file(path, package = package, mustWork = TRUE)
 }
+
+
+list_to_integer <- function(x) {
+  vapply(x, identity, integer(1))
+}

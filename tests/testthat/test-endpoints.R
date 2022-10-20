@@ -26,9 +26,11 @@ test_that("Validate model", {
   res <- model_validate(json)
   expect_setequal(names(res), c("valid", "metadata"))
   expect_true(res$valid)
-  expect_setequal(names(res$metadata), c("variables", "parameters", "messages"))
+  expect_setequal(names(res$metadata),
+                  c("variables", "parameters", "dt", "messages"))
   expect_equal(res$metadata$variables, "x")
   expect_equal(res$metadata$parameters, list())
+  expect_null(res$metadata$dt)
   expect_equal(res$metadata$messages, list())
 
   endpoint <- odin_api_endpoint("POST", "/validate")
@@ -78,23 +80,6 @@ test_that("Validate rejects invalid model", {
   expect_true(res_endpoint$validated)
   expect_equal(res_endpoint$status_code, 200)
   expect_equal(res_endpoint$data, res)
-})
-
-
-test_that("Validate rejects discrete time model", {
-  data <- list(model = "initial(x) <- 1\nupdate(x) <- 1",
-               requirements = list(timeType = "continuous"))
-  json <- jsonlite::toJSON(data, auto_unbox = TRUE)
-
-  res <- model_validate(json)
-  expect_setequal(names(res), c("valid", "error"))
-  expect_false(res$valid)
-  expect_setequal(names(res$error), c("message", "line"))
-  expect_match(
-    res$error$message,
-    "Expected a continuous time model (using deriv, not update)",
-    fixed = TRUE)
-  expect_equal(res$error$line, 2)
 })
 
 

@@ -7,6 +7,7 @@ test_that("can validate simple ode model", {
     list(valid = scalar(TRUE),
          metadata = list(variables = "x",
                          parameters = list(),
+                         dt = NULL,
                          messages = list())))
 })
 
@@ -20,20 +21,48 @@ test_that("can validate simple discrete time model", {
     list(valid = scalar(TRUE),
          metadata = list(variables = "x",
                          parameters = list(),
+                         dt = scalar(1),
                          messages = list())))
+})
+
+
+test_that("can validate simple discrete time model that sets dt", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1 + r * dt",
+            "r <- 1",
+            "dt <- 0.1")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  expect_mapequal(
+    res,
+    list(valid = scalar(TRUE),
+         metadata = list(variables = "x",
+                         parameters = list(),
+                         dt = scalar(0.1),
+                         messages = list())))
+})
+
+
+test_that("can require that dt assignment is really simple", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1 + r * dt",
+            "steps_per_time <- 5",
+            "r <- 1",
+            "dt <- 1 / steps_per_time")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  msg <- "'dt' must be a simple numeric expression, if present"
+  expect_mapequal(
+    res,
+    list(valid = scalar(FALSE),
+         error = list(message = scalar(msg), line = 5)))
 })
 
 
 test_that("can check requirements make sense", {
   code <- c("initial(x) <- 1",
             "deriv(x) <- 1")
-  res <- odin_js_validate(code, list(timeType = "discrete"))
-  expect_mapequal(
-    res,
-    list(valid = scalar(FALSE),
-         error = list(
-           message = scalar("Only continuous time models currently supported"),
-           line = integer(0))))
+  expect_error(odin_js_validate(code, list(timeType = "magical")),
+               "Unexpected value 'magical' for timeType",
+               class = "porcelain_error")
 })
 
 
