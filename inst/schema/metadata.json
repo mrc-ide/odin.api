@@ -7,6 +7,10 @@
                 "type": "string"
             }
         },
+        "dt": {
+            "comment": "Time step, for discrete time models (null for continuous time models)",
+            "type": ["null", "number"]
+        },
         "parameters": {
             "type": "array",
             "items": {

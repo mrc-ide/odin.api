@@ -37,6 +37,25 @@ odin_js_validate <- function(code, requirements) {
   variables <- c(names(dat$data$variable$contents),
                  names(dat$data$output$contents))
 
+  dt <- NULL
+  if (dat$features$discrete) {
+    eq <- dat$equations$dt
+    if (is.null(eq)) {
+      dt <- scalar(1)
+    } else {
+      ## TODO: later we can relax this to allow simple expressions, or
+      ## even dependencies only on things available at compile time,
+      ## or from user variables, but we don't need that at the moment
+      ## so just going with the easiest form:
+      if (eq$type != "expression_scalar" || !is.numeric(eq$rhs$value)) {
+        msg <- "'dt' must be a simple numeric expression, if present"
+        return(list(valid = scalar(FALSE),
+                    error = odin_error_detail(msg, list_to_integer(eq$source))))
+      }
+      dt <- scalar(eval(eq$rhs$value, baseenv()))
+    }
+  }
+
   process_user <- function(nm) {
     x <- dat$equations[[nm]]$user
     list(name = scalar(nm),
@@ -52,33 +71,23 @@ odin_js_validate <- function(code, requirements) {
        metadata = list(
          variables = variables,
          parameters = parameters,
+         dt = dt,
          messages = messages))
 }
 
 
 check_requirements <- function(result, requirements) {
-  if (is.null(requirements)) {
-    requirements <- list(timeType = "continuous")
-  }
-
-  ## This is the error we'd get if the server has asked that we check
-  ## we provide a discrete time model, regardless of what the
-  ## user-provided code is. We can't do this yet. This error should
-  ## never be surfaced in the app unless we've deployed incompatible
-  ## versions.
-  if (requirements$timeType != "continuous") {
-    msg <- "Only continuous time models currently supported"
-    return(odin_validate_error_value(msg, integer(0)))
-  }
+  requirements <- validate_requirements(requirements)
 
   dat <- result$result
-
-  if (dat$features$discrete) {
-    ## Once discrete time models are supported at all, we will also need
-    ## to check that stochastic models do not use output (or
-    ## interpolation?) as this is not supported in dust, even though it
-    ## still is in odin itself.
-    msg <- "Expected a continuous time model (using deriv, not update)"
+  is_discrete <- dat$features$discrete
+  model_time_type <- if (is_discrete) "discrete" else "continuous"
+  if (model_time_type != requirements$timeType) {
+    using <- list(continuous = "deriv", discrete = "update")
+    msg <- sprintf("Expected a %s time model (using %s, not %s)",
+                   requirements$timeType,
+                   using[[requirements$timeType]],
+                   using[[model_time_type]])
     vars <- names(dat$data$variable$contents)
     line <- lapply(dat$equations, function(el) {
       if (el$lhs %in% vars && el$name %in% dat$components$rhs)
@@ -86,6 +95,16 @@ check_requirements <- function(result, requirements) {
     })
     return(odin_validate_error_value(msg, line))
   }
+
+  if (is_discrete && dat$features$has_output) {
+    msg <- "output() is not supported in discrete time models"
+    output <- names(dat$data$output$contents)
+    line <- lapply(dat$equations, function(el) {
+      if (el$lhs %in% output) el$source else NULL
+    })
+    return(odin_validate_error_value(msg, line))
+  }
+
   if (dat$features$has_array) {
     ## Later, we'll check here to find out where arrays are being used
     ## as there are two separate problems:
@@ -121,8 +140,7 @@ odin_error_detail <- function(msg, line) {
 }
 
 
-
-## The patterns that things might confirm to are
+## The patterns that things might conform to are
 ##
 ## (file):(line):(column): (message)
 ##
@@ -153,4 +171,23 @@ parse_parse_error <- function(msg) {
   }
 
   list(msg = msg, line = line)
+}
+
+
+## this bit validates the request, not the model
+validate_requirements <- function(requirements) {
+  if (is.null(requirements)) {
+    requirements <- list()
+  }
+  ## Default to continuous time:
+  requirements$timeType <- requirements$timeType %||% "continuous"
+
+  time_type_valid <- c("continuous", "discrete")
+  if (!(requirements$timeType %in% time_type_valid)) {
+    porcelain::porcelain_stop(
+      sprintf("Unexpected value '%s' for timeType", requirements$timeType),
+      status_code = 400)
+  }
+
+  requirements
 }

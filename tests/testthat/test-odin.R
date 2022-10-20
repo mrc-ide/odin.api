@@ -1,4 +1,4 @@
-test_that("can validate simple model", {
+test_that("can validate simple ode model", {
   code <- c("initial(x) <- 1",
             "deriv(x) <- 1")
   res <- odin_js_validate(code, NULL)
@@ -7,20 +7,62 @@ test_that("can validate simple model", {
     list(valid = scalar(TRUE),
          metadata = list(variables = "x",
                          parameters = list(),
+                         dt = NULL,
                          messages = list())))
+})
+
+
+test_that("can validate simple discrete time model", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  expect_mapequal(
+    res,
+    list(valid = scalar(TRUE),
+         metadata = list(variables = "x",
+                         parameters = list(),
+                         dt = scalar(1),
+                         messages = list())))
+})
+
+
+test_that("can validate simple discrete time model that sets dt", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1 + r * dt",
+            "r <- 1",
+            "dt <- 0.1")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  expect_mapequal(
+    res,
+    list(valid = scalar(TRUE),
+         metadata = list(variables = "x",
+                         parameters = list(),
+                         dt = scalar(0.1),
+                         messages = list())))
+})
+
+
+test_that("can require that dt assignment is really simple", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1 + r * dt",
+            "steps_per_time <- 5",
+            "r <- 1",
+            "dt <- 1 / steps_per_time")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  msg <- "'dt' must be a simple numeric expression, if present"
+  expect_mapequal(
+    res,
+    list(valid = scalar(FALSE),
+         error = list(message = scalar(msg), line = 5)))
 })
 
 
 test_that("can check requirements make sense", {
   code <- c("initial(x) <- 1",
             "deriv(x) <- 1")
-  res <- odin_js_validate(code, list(timeType = "discrete"))
-  expect_mapequal(
-    res,
-    list(valid = scalar(FALSE),
-         error = list(
-           message = scalar("Only continuous time models currently supported"),
-           line = integer(0))))
+  expect_error(odin_js_validate(code, list(timeType = "magical")),
+               "Unexpected value 'magical' for timeType",
+               class = "porcelain_error")
 })
 
 
@@ -29,6 +71,19 @@ test_that("can ensure models have the expected time type", {
             "update(x) <- 1")
   res <- odin_js_validate(code, list(timeType = "continuous"))
   msg <- "Expected a continuous time model (using deriv, not update)"
+  expect_mapequal(
+    res,
+    list(valid = scalar(FALSE),
+         error = list(
+           message = scalar(msg), line = 2)))
+})
+
+
+test_that("can ensure models have the expected time type", {
+  code <- c("initial(x) <- 1",
+            "deriv(x) <- 1")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  msg <- "Expected a discrete time model (using update, not deriv)"
   expect_mapequal(
     res,
     list(valid = scalar(FALSE),
@@ -48,6 +103,21 @@ test_that("disable use of arrays", {
     list(valid = scalar(FALSE),
          error = list(
            message = scalar(msg), line = c(1, 2))))
+})
+
+
+test_that("disable use of output within discrete models", {
+  code <- c("initial(x) <- 1",
+            "update(x) <- 1",
+            "output(a) <- 1",
+            "output(b) <- 2")
+  res <- odin_js_validate(code, list(timeType = "discrete"))
+  msg <-  "output() is not supported in discrete time models"
+  expect_mapequal(
+    res,
+    list(valid = scalar(FALSE),
+         error = list(
+           message = scalar(msg), line = c(3, 4))))
 })
 
 

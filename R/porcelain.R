@@ -35,5 +35,13 @@
         support_runner_ode,
         returning = porcelain::porcelain_returning_json(),
         validate = validate)
+    },
+    "GET /support/runner-discrete" = function(state, validate) {
+      porcelain::porcelain_endpoint$new(
+        "GET",
+        "/support/runner-discrete",
+        support_runner_discrete,
+        returning = porcelain::porcelain_returning_json(),
+        validate = validate)
     })
 }
