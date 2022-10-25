@@ -1,6 +1,6 @@
 Package: odin.api
 Title: Serve 'odin' Models via an API
-Version: 0.1.7
+Version: 0.1.8
 Authors@R: c(person("Rich", "FitzJohn", role = c("aut", "cre"),
                     email = "rich.fitzjohn@gmail.com"),
              person("Imperial College of Science, Technology and Medicine",
@@ -21,6 +21,7 @@ Imports:
     pkgbuild,
     porcelain (>= 0.1.7)
 Suggests:
+    V8,
     httr,
     mockery,
     testthat (>= 3.0.0)

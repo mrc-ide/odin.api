@@ -64,5 +64,5 @@ support_runner_ode <- function() {
 ##' @porcelain GET /support/runner-discrete => json
 support_runner_discrete <- function() {
   code <- read_string(system_file("js/dust.js", "odin"))
-  scalar(paste0(code, "odinjs;"))
+  scalar(paste0(code, "dust;"))
 }
