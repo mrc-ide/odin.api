@@ -145,3 +145,13 @@ test_that("can tidy up parse errors", {
                list(msg = "unexpected symbol",
                     line = 1))
 })
+
+
+test_that("don't return NULL for lines even when lines not known", {
+  res <- odin_js_validate("initial(x) <- 1")
+  expect_equal(res$valid, scalar(FALSE))
+  expect_equal(
+    res$error,
+    list(message = scalar("Did not find a deriv() or an update() call"),
+         line = integer(0)))
+})

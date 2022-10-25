@@ -50,7 +50,8 @@ odin_js_validate <- function(code, requirements) {
       if (eq$type != "expression_scalar" || !is.numeric(eq$rhs$value)) {
         msg <- "'dt' must be a simple numeric expression, if present"
         return(list(valid = scalar(FALSE),
-                    error = odin_error_detail(msg, list_to_integer(eq$source))))
+                    error = odin_error_detail(msg,
+                                              list_to_integer(eq$source))))
       }
       dt <- scalar(eval(eq$rhs$value, baseenv()))
     }
@@ -136,7 +137,7 @@ odin_validate_error_value <- function(msg, line = integer(0)) {
 
 odin_error_detail <- function(msg, line) {
   list(message = scalar(msg),
-       line = line)
+       line = line %||% integer(0))
 }
 
 
