@@ -21,6 +21,7 @@ Imports:
     pkgbuild,
     porcelain (>= 0.1.7)
 Suggests:
+    V8,
     httr,
     mockery,
     testthat (>= 3.0.0)
