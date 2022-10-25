@@ -217,6 +217,9 @@ test_that("Can generate support code", {
   res <- support_runner_ode()
   expect_true(js::js_validate_script(res))
 
+  ## Assert no error when evaluating source code
+  expect_silent(V8::v8()$eval(res))
+
   endpoint <- odin_api_endpoint("GET", "/support/runner-ode")
   res_endpoint <- endpoint$run()
 
@@ -229,6 +232,9 @@ test_that("Can generate support code", {
 test_that("Can generate support code", {
   res <- support_runner_discrete()
   expect_true(js::js_validate_script(res))
+
+  ## Assert no error when evaluating source code
+  expect_silent(V8::v8()$eval(res))
 
   endpoint <- odin_api_endpoint("GET", "/support/runner-discrete")
   res_endpoint <- endpoint$run()
