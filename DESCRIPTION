@@ -26,6 +26,6 @@ Suggests:
     mockery,
     testthat (>= 3.0.0)
 Remotes:
-    mrc-ide/odin@odin-mrc-3745,
+    mrc-ide/odin,
     reside-ic/porcelain
 Config/testthat/edition: 3
