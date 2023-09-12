@@ -243,3 +243,15 @@ test_that("Can generate support code", {
   expect_equal(res_endpoint$content_type, "application/json")
   expect_equal(res_endpoint$data, res)
 })
+
+
+test_that("don't fail if user calls have fractions", {
+  data <- list(model = c("initial(x) <- 1",
+                         "deriv(x) <- a",
+                         "a <- user(1 / 2)"))
+  json <- jsonlite::toJSON(data, auto_unbox = TRUE)
+  res <- model_validate(json)
+  expect_equal(
+    res$metadata$parameters[[1]]$default,
+    scalar(0.5))
+})
