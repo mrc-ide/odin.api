@@ -59,8 +59,12 @@ odin_js_validate <- function(code, requirements) {
 
   process_user <- function(nm) {
     x <- dat$equations[[nm]]$user
+    default <- x$default %||% NA_real_
+    if (is.recursive(default)) {
+      default <- eval(list_to_sexp(default), baseenv())
+    }
     list(name = scalar(nm),
-         default = scalar(x$default %||% NA),
+         default = scalar(default),
          min = scalar(x$min %||% NA),
          max = scalar(x$max %||% NA),
          is_integer = scalar(x$integer %||% FALSE),

@@ -46,3 +46,14 @@ system_file <- function(path, package) {
 list_to_integer <- function(x) {
   vapply(x, identity, integer(1))
 }
+
+
+list_to_sexp <- function(x) {
+  if (is.recursive(x)) {
+    as.call(lapply(x, list_to_sexp))
+  } else if (is.character(x)) {
+    as.name(x)
+  } else {
+    x
+  }
+}
