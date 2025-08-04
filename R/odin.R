@@ -110,22 +110,22 @@ check_requirements <- function(result, requirements) {
     return(odin_validate_error_value(msg, line))
   }
 
-  if (dat$features$has_array) {
-    ## Later, we'll check here to find out where arrays are being used
-    ## as there are two separate problems:
-    ##
-    ## * array variables and output (difficult to plot)
-    ## * array parameters (difficult to enter)
-    ##
-    ## We'll likely support these separately later but for now it's ok
-    ## to rule both out. Once we split these we'll get better line
-    ## numbers I suspect, but this should work for now.
-    msg <- "Models that use arrays are not supported"
-    line <- lapply(dat$equations, function(el) {
-      if (el$type %in% "expression_array") el$source else NULL
-    })
-    return(odin_validate_error_value(msg, line))
-  }
+  # if (dat$features$has_array) {
+  #   ## Later, we'll check here to find out where arrays are being used
+  #   ## as there are two separate problems:
+  #   ##
+  #   ## * array variables and output (difficult to plot)
+  #   ## * array parameters (difficult to enter)
+  #   ##
+  #   ## We'll likely support these separately later but for now it's ok
+  #   ## to rule both out. Once we split these we'll get better line
+  #   ## numbers I suspect, but this should work for now.
+  #   msg <- "Models that use arrays are not supported"
+  #   line <- lapply(dat$equations, function(el) {
+  #     if (el$type %in% "expression_array") el$source else NULL
+  #   })
+  #   return(odin_validate_error_value(msg, line))
+  # }
 
   result
 }
