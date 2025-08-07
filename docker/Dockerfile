@@ -18,9 +18,11 @@ RUN install2.r --error \
         docopt \
         jsonlite \
         logr \
-        odin \
         pkgbuild \
-        porcelain
+        porcelain \
+        remotes
+
+RUN installGithub.r mrc-ide/odin@include-interpolate
 
 COPY DESCRIPTION /tmp/DESCRIPTION
 
