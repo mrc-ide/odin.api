@@ -47,13 +47,16 @@ odin_js_validate <- function(code, requirements) {
       ## even dependencies only on things available at compile time,
       ## or from user variables, but we don't need that at the moment
       ## so just going with the easiest form:
-      # if (eq$type != "expression_scalar" || !is.numeric(eq$rhs$value)) {
-      #   msg <- "'dt' must be a simple numeric expression, if present"
-      #   return(list(valid = scalar(FALSE),
-      #               error = odin_error_detail(msg,
-      #                                         list_to_integer(eq$source))))
-      # }
-      dt <- scalar(eval(eq$rhs$value, baseenv()))
+      if (eq$type != "expression_scalar" || !is.numeric(eq$rhs$value)) {
+        dt <- eval(eq$rhs$value, baseenv())
+        print(dt)
+        # msg <- "'dt' must be a simple numeric expression, if present"
+        # return(list(valid = scalar(FALSE),
+        #             error = odin_error_detail(msg,
+        #                                       list_to_integer(eq$source))))
+      } else {
+        dt <- scalar(eval(eq$rhs$value, baseenv()))
+      }
     }
   }
 
