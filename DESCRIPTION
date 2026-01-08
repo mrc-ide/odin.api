@@ -24,7 +24,8 @@ Suggests:
     V8,
     httr,
     mockery,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Remotes:
     mrc-ide/odin,
     reside-ic/porcelain
