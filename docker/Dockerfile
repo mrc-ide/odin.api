@@ -18,17 +18,15 @@ RUN install2.r --error \
         docopt \
         jsonlite \
         logr \
+        odin \
         pkgbuild \
-        porcelain \
-        remotes
+        porcelain
 
 COPY DESCRIPTION /tmp/DESCRIPTION
 
 # Then get the full list via remotes
 RUN install2.r --error remotes &&  \
         Rscript -e 'remotes::install_deps("/tmp")'
-
-RUN installGithub.r mrc-ide/odin@include-interpolate
 
 EXPOSE 8001
 
