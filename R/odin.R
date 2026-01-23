@@ -110,7 +110,8 @@ check_requirements <- function(result, requirements) {
     return(odin_validate_error_value(msg, line))
   }
 
-  if (dat$features$has_array) {
+  allow_array <- Sys.getenv("ODIN_ALLOW_ARRAY", unset = "") == "true"
+  if (dat$features$has_array && !allow_array) {
     ## Later, we'll check here to find out where arrays are being used
     ## as there are two separate problems:
     ##

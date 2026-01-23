@@ -17,14 +17,15 @@ Imports:
     js,
     jsonlite,
     lgr,
-    odin (>= 1.5.8),
+    odin (>= 1.5.12),
     pkgbuild,
     porcelain (>= 0.1.8)
 Suggests:
     V8,
     httr,
     mockery,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Remotes:
     mrc-ide/odin,
     reside-ic/porcelain

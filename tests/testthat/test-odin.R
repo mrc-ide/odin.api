@@ -105,6 +105,23 @@ test_that("disable use of arrays", {
            message = scalar(msg), line = c(1, 2))))
 })
 
+test_that("allow use of arrays if ODIN_ALLOW_ARRAY is true", {
+  code <- c("initial(x[]) <- 1",
+            "deriv(x[]) <- 1",
+            "dim(x) <- 5")
+  withr::with_envvar(
+    new = c("ODIN_ALLOW_ARRAY" = "true"),
+    res <- odin_js_validate(code, list(timeType = "continuous"))
+  )
+  expect_mapequal(
+    res,
+    list(valid = scalar(TRUE),
+         metadata = list(variables = "x",
+                         parameters = list(),
+                         dt = NULL,
+                         messages = list())))
+})
+
 
 test_that("disable use of output within discrete models", {
   code <- c("initial(x) <- 1",
