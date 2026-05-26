@@ -28,6 +28,15 @@
         returning = porcelain::porcelain_returning_json("compile_response"),
         validate = validate)
     },
+    "POST /compile2" = function(state, validate) {
+      porcelain::porcelain_endpoint$new(
+        "POST",
+        "/compile2",
+        model_compile2,
+        porcelain::porcelain_input_body_json("data", "compile2_request"),
+        returning = porcelain::porcelain_returning_json("compile2_response"),
+        validate = validate)
+    },
     "GET /support/runner-ode" = function(state, validate) {
       porcelain::porcelain_endpoint$new(
         "GET",

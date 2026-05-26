@@ -22,6 +22,11 @@ RUN install2.r --error \
         pkgbuild \
         porcelain
 
+RUN install2.r --error \
+        remotes
+
+RUN installGithub.r mrc-ide/odin2@odin2-js-wip
+
 COPY DESCRIPTION /tmp/DESCRIPTION
 
 # Then get the full list via remotes

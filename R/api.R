@@ -52,6 +52,19 @@ model_compile <- function(data, pretty = FALSE) {
 }
 
 
+##' @porcelain POST /compile2 => json(compile2_response)
+##'   body data :: json(compile2_request)
+model_compile2 <- function(data) {
+  data <- jsonlite::fromJSON(data, simplifyDataFrame = FALSE)
+  result <- odin2_js_validate(data$model)
+  if (result$valid) {
+    code <- odin2::odin_show_js(data$model, "text")
+    result$model <- scalar(paste(code, collapse = "\n"))
+  }
+  result
+}
+
+
 ##' @porcelain GET /support/runner-ode => json
 support_runner_ode <- function() {
   code <- read_string(system_file("js/odin.js", "odin"))

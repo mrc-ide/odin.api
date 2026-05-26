@@ -6,6 +6,20 @@ odin_js_model <- function(code) {
 }
 
 
+odin2_js_validate <- function(code) {
+  result <- odin2::odin_validate(code, "text")
+
+  if (!result$success) {
+    err <- result$error
+    list(valid = scalar(FALSE),
+         error = odin_error_detail(err$message, err$src))
+  } else {
+    list(valid = scalar(TRUE),
+         metadata = result$result)
+  }
+}
+
+
 odin_js_validate <- function(code, requirements) {
   options <- odin::odin_options(target = "js")
   result <- odin::odin_validate(code, "text", options)
