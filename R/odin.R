@@ -12,7 +12,7 @@ odin2_js_validate <- function(code) {
   if (!result$success) {
     err <- result$error
     list(valid = scalar(FALSE),
-         error = odin_error_detail(err$message, err$src))
+         error = odin_error_detail(err$message, err$src$start))
   } else {
     list(valid = scalar(TRUE),
          metadata = result$result)

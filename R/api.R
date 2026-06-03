@@ -59,6 +59,7 @@ model_compile2 <- function(data) {
   result <- odin2_js_validate(data$model)
   if (result$valid) {
     code <- odin2::odin_show_js(data$model, "text")
+    code <- c(code, "odin_system;")
     result$model <- scalar(paste(code, collapse = "\n"))
   }
   result
