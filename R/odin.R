@@ -7,7 +7,7 @@ odin_js_model <- function(code) {
 
 
 odin2_js_validate <- function(code) {
-  result <- odin2::odin_validate(code, "text")
+  result <- odin2::odin_validate(code, "text", check_bounds = FALSE)
 
   if (!result$success) {
     err <- result$error
