@@ -67,7 +67,7 @@ RUN install2.r --error \
 RUN install2.r --error \
         remotes
 
-RUN installGithub.r mrc-ide/odin2@dc3c925
+RUN installGithub.r mrc-ide/odin2@9db29f1
 
 COPY DESCRIPTION /tmp/DESCRIPTION
 
