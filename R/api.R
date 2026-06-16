@@ -61,6 +61,9 @@ model_compile2 <- function(data) {
     code <- odin2::odin_show_js(data$model, "text", check_bounds = FALSE)
     code <- c(code, "odin_system;")
     result$model <- scalar(paste(code, collapse = "\n"))
+
+    # this is a scalar which json converts to a single array
+    result$time <- scalar(result$time)
   }
   result
 }
