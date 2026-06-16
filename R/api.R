@@ -63,7 +63,7 @@ model_compile2 <- function(data) {
     result$model <- scalar(paste(code, collapse = "\n"))
 
     # this is a scalar which json converts to a single array
-    result$time <- scalar(result$time[[1]])
+    result$metadata$time <- scalar(result$metadata$time)
   }
   result
 }
