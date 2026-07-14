@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.1.2
+FROM rocker/r-ver:4.4.3
 
 RUN apt-get update &&  apt-get install -y --no-install-recommends \
         libcurl4-openssl-dev \
@@ -14,13 +14,60 @@ COPY docker/Rprofile.site /usr/local/lib/R/etc/Rprofile.site
 # More cache-friendly installation of some dependencies:
 RUN install2.r --error \
         --repos=https://mrc-ide.github.io/drat \
-        --repos=https://packagemanager.rstudio.com/all/__linux__/focal/latest \
+        --repos=https://packagemanager.rstudio.com/all/__linux__/noble/latest \
         docopt \
         jsonlite \
         logr \
+        later \
+        fastmap \
+        otel \
+        ps \
+        Rcpp \
+        curl \
+        crayon \
+        httpuv \
+        lifecycle \
+        magrittr \
+        mime \
+        promises \
+        rlang \
+        sodium
+
+
+RUN install2.r --error \
+        --repos=https://mrc-ide.github.io/drat \
+        --repos=https://packagemanager.rstudio.com/all/__linux__/noble/latest \
+        stringi \
+        swagger \
+        webutils \
+        common \
+        withr \
+        R6 \
+        cinterpolate \
+        deSolve \
+        digest \
+        glue \
+        ring \
+        callr \
+        cli \
+        desc \
+        processx
+
+RUN install2.r --error \
+        --repos=https://mrc-ide.github.io/drat \
+        --repos=https://packagemanager.rstudio.com/all/__linux__/noble/latest \
         odin \
-        pkgbuild \
+        pkgbuild
+
+RUN install2.r --error \
+        --repos=https://mrc-ide.github.io/drat \
+        --repos=https://packagemanager.rstudio.com/all/__linux__/noble/latest \
         porcelain
+
+RUN install2.r --error \
+        remotes
+
+RUN installGithub.r mrc-ide/odin2@9b03ddb
 
 COPY DESCRIPTION /tmp/DESCRIPTION
 
